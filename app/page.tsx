@@ -11,25 +11,13 @@ import SetProgress from './components/SetProgress';
 export default function Home() {
   const [config, setConfig] = useState<Config>(DEFAULT_CONFIG);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-  const [theme, setTheme] = useState('light');
 
   useEffect(() => {
     const savedConfig = localStorage.getItem(STORAGE_KEYS.CONFIG);
     if (savedConfig) {
       setConfig({ ...DEFAULT_CONFIG, ...JSON.parse(savedConfig) });
     }
-
-    const savedTheme = localStorage.getItem(STORAGE_KEYS.THEME) || 'light';
-    setTheme(savedTheme);
-    document.documentElement.setAttribute('data-theme', savedTheme);
   }, []);
-
-  const toggleTheme = () => {
-    const newTheme = theme === 'dark' ? 'light' : 'dark';
-    setTheme(newTheme);
-    localStorage.setItem(STORAGE_KEYS.THEME, newTheme);
-    document.documentElement.setAttribute('data-theme', newTheme);
-  };
 
   const {
     phase,
@@ -77,17 +65,10 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 p-4 transition-colors duration-300">
+    <main className="min-h-screen bg-gray-50 text-gray-900 p-4 transition-colors duration-300">
       <div className="max-w-md mx-auto space-y-8">
         <header className="flex justify-between items-center py-4">
           <h1 className="text-2xl font-bold">공부 타이머</h1>
-          <button
-            onClick={toggleTheme}
-            className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors text-xl"
-            title="다크/라이트 모드 전환"
-          >
-            {theme === 'dark' ? '☀️' : '🌙'}
-          </button>
         </header>
 
         <section className={`timer-section ${isRunning ? 'running' : ''} ${phase === PHASE.COMPLETE ? 'completed' : ''}`}>
@@ -121,7 +102,7 @@ export default function Home() {
           />
         </section>
 
-        <section className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg">
+        <section className="bg-white p-6 rounded-2xl shadow-lg">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-bold">설정</h2>
             <button

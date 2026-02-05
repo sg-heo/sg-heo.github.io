@@ -5,7 +5,6 @@ import { DEFAULT_CONFIG, STORAGE_KEYS, Config, PHASE } from './types';
 import { useTimer } from './hooks/useTimer';
 import TimerDisplay from './components/TimerDisplay';
 import Controls from './components/Controls';
-import LogList from './components/LogList';
 import Settings from './components/Settings';
 import SetProgress from './components/SetProgress';
 
@@ -38,11 +37,9 @@ export default function Home() {
     remainingSeconds,
     totalSeconds,
     isRunning,
-    logs,
     start,
     pause,
     reset,
-    saveLogs
   } = useTimer(config);
 
   const handleSaveConfig = (newConfig: Config) => {
@@ -55,16 +52,6 @@ export default function Home() {
     localStorage.setItem(STORAGE_KEYS.CONFIG, JSON.stringify(newConfig));
     reset();
     setIsSettingsOpen(false);
-  };
-
-  const handleDeleteLog = (id: string) => {
-    const newLogs = logs.filter(l => l.id !== id);
-    saveLogs(newLogs);
-  };
-
-  const handleUpdateComment = (id: string, comment: string) => {
-    const newLogs = logs.map(l => l.id === id ? { ...l, comment } : l);
-    saveLogs(newLogs);
   };
 
   const getPhaseLabel = () => {
@@ -148,15 +135,6 @@ export default function Home() {
           {isSettingsOpen && (
             <Settings config={config} onSave={handleSaveConfig} />
           )}
-        </section>
-
-        <section className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg">
-          <h2 className="text-xl font-bold mb-4">공부 로그</h2>
-          <LogList
-            logs={logs}
-            onDelete={handleDeleteLog}
-            onUpdateComment={handleUpdateComment}
-          />
         </section>
       </div>
     </main>

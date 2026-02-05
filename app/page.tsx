@@ -140,7 +140,7 @@ export default function Home() {
         </section>
 
         <footer className="text-center text-xs text-gray-400 font-medium">
-          © 2024 Study Timer. All rights reserved.
+          © 2026 Study Timer. All rights reserved.
         </footer>
       </div>
     </main>

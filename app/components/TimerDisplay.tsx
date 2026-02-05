@@ -9,23 +9,23 @@ interface TimerDisplayProps {
 
 export default function TimerDisplay({ phase, remainingSeconds, totalSeconds }: TimerDisplayProps) {
   const progress = remainingSeconds / totalSeconds;
-  const radius = 130;
+  const radius = 120;
   const circumference = 2 * Math.PI * radius;
   const offset = circumference * (1 - progress);
 
   const getPhaseColor = () => {
     switch (phase) {
-      case PHASE.READY: return 'var(--warning-color)';
-      case PHASE.STUDY: return 'var(--success-color)';
-      case PHASE.REST: return 'var(--accent-color)';
-      case PHASE.COMPLETE: return 'var(--success-color)';
-      default: return 'var(--accent-color)';
+      case PHASE.READY: return '#f59e0b'; // warning
+      case PHASE.STUDY: return '#10b981'; // success
+      case PHASE.REST: return '#3b82f6'; // accent
+      case PHASE.COMPLETE: return '#10b981'; // success
+      default: return '#3b82f6';
     }
   };
 
   const getPresetText = () => {
     switch (phase) {
-      case PHASE.IDLE: return '시작을 눌러주세요';
+      case PHASE.IDLE: return '준비되셨나요?';
       case PHASE.READY: return '곧 시작합니다...';
       case PHASE.STUDY: return '집중하세요!';
       case PHASE.REST: return '잠시 쉬어가세요';
@@ -35,23 +35,28 @@ export default function TimerDisplay({ phase, remainingSeconds, totalSeconds }: 
   };
 
   return (
-    <div className="relative flex items-center justify-center w-[300px] h-[300px] my-8">
-      <svg className="transform -rotate-90 w-full h-full" viewBox="0 0 300 300">
+    <div className="relative flex items-center justify-center w-[280px] h-[280px] my-4 mx-auto">
+      {/* 배경 원 */}
+      <div className="absolute inset-0 rounded-full bg-gray-50 shadow-inner"></div>
+      
+      <svg className="transform -rotate-90 w-full h-full relative z-10 drop-shadow-xl" viewBox="0 0 300 300">
+        {/* 트랙 */}
         <circle
           cx="150"
           cy="150"
           r={radius}
-          stroke="currentColor"
-          strokeWidth="8"
+          stroke="#e5e7eb"
+          strokeWidth="12"
           fill="transparent"
-          className="text-gray-200 dark:text-gray-700"
+          className="opacity-50"
         />
+        {/* 진행 바 */}
         <circle
           cx="150"
           cy="150"
           r={radius}
           stroke={getPhaseColor()}
-          strokeWidth="8"
+          strokeWidth="12"
           fill="transparent"
           strokeDasharray={circumference}
           strokeDashoffset={offset}
@@ -59,13 +64,14 @@ export default function TimerDisplay({ phase, remainingSeconds, totalSeconds }: 
           className="transition-all duration-1000 ease-linear"
         />
       </svg>
-      <div className="absolute text-center flex flex-col items-center">
-        <div className={`text-6xl font-bold font-mono mb-2 ${phase === PHASE.READY ? 'text-yellow-500' : ''}`}>
+      
+      <div className="absolute text-center flex flex-col items-center z-20">
+        <div className={`text-7xl font-bold font-mono tracking-tighter mb-2 tabular-nums ${phase === PHASE.READY ? 'text-yellow-500' : 'text-gray-800'}`}>
           {phase === PHASE.READY || phase === PHASE.IDLE 
             ? formatCountdown(remainingSeconds)
             : formatTime(remainingSeconds)}
         </div>
-        <span className="text-sm text-gray-500 dark:text-gray-400 font-medium">
+        <span className="text-sm text-gray-500 font-medium bg-white/80 px-3 py-1 rounded-full shadow-sm backdrop-blur-sm">
           {getPresetText()}
         </span>
       </div>
